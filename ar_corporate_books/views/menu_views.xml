@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Main Menu -->
+        <menuitem id="menu_ar_corporate_books_root" 
+                  name="Corporate Books" 
+                  web_icon="ar_corporate_books,static/description/icon.svg" 
+                  sequence="80"/>
+
+        <!-- Books Submenu -->
+        <menuitem id="menu_ar_corporate_books" 
+                  name="Books" 
+                  parent="menu_ar_corporate_books_root" 
+                  sequence="10"/>
+
+        <menuitem id="menu_corporate_book" 
+                  name="Corporate Books" 
+                  parent="menu_ar_corporate_books" 
+                  action="action_corporate_book" 
+                  sequence="10"/>
+
+        <menuitem id="menu_accounting_book" 
+                  name="Accounting Books" 
+                  parent="menu_ar_corporate_books" 
+                  action="action_accounting_book" 
+                  sequence="20"/>
+
+        <menuitem id="menu_journal_book" 
+                  name="Journal Books" 
+                  parent="menu_ar_corporate_books" 
+                  action="action_journal_book_entries" 
+                  sequence="21"/>
+
+        <menuitem id="menu_ledger_book" 
+                  name="Ledger Books" 
+                  parent="menu_ar_corporate_books" 
+                  action="action_ledger_book_entries" 
+                  sequence="22"/>
+
+        <menuitem id="menu_book_inventory" 
+                  name="Book Inventory" 
+                  parent="menu_ar_corporate_books" 
+                  action="action_book_inventory" 
+                  sequence="30"/>
+                  
+        <!-- Minutes Submenu -->
+        <menuitem id="menu_ar_minutes" 
+                  name="Minutes" 
+                  parent="menu_ar_corporate_books_root" 
+                  sequence="20"/>
+
+        <menuitem id="menu_meeting_minute" 
+                  name="All Minutes" 
+                  parent="menu_ar_minutes" 
+                  action="action_meeting_minute" 
+                  sequence="10"/>
+
+        <menuitem id="menu_board_meeting_minutes" 
+                  name="Board Meeting Minutes" 
+                  parent="menu_ar_minutes" 
+                  action="action_board_meeting_minutes" 
+                  sequence="20"/>
+
+        <menuitem id="menu_shareholder_meeting_minutes" 
+                  name="Shareholder Meeting Minutes" 
+                  parent="menu_ar_minutes" 
+                  action="action_shareholder_meeting_minutes" 
+                  sequence="30"/>
+
+        <!-- Shareholders Submenu -->
+        <menuitem id="menu_ar_shareholders" 
+                  name="Shareholders" 
+                  parent="menu_ar_corporate_books_root" 
+                  sequence="30"/>
+
+        <menuitem id="menu_shareholder" 
+                  name="Shareholders" 
+                  parent="menu_ar_shareholders" 
+                  action="action_shareholder" 
+                  sequence="10"/>
+
+        <menuitem id="menu_shareholder_transaction" 
+                  name="Share Transactions" 
+                  parent="menu_ar_shareholders" 
+                  action="action_shareholder_transaction" 
+                  sequence="20"/>
+
+        <menuitem id="menu_assembly_attendance" 
+                  name="Assembly Attendances" 
+                  parent="menu_ar_shareholders" 
+                  action="action_assembly_attendance" 
+                  sequence="30"/>
+
+        <!-- Configuration Submenu -->
+        <menuitem id="menu_ar_configuration" 
+                  name="Configuration" 
+                  parent="menu_ar_corporate_books_root" 
+                  groups="base.group_system" 
+                  sequence="99"/>
+    </data>
+</odoo>

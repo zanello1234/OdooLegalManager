@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="meeting_minute_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            
+                            <div class="text-center">
+                                <h2>
+                                    <t t-if="o.meeting_type == 'board'">BOARD OF DIRECTORS MEETING MINUTES</t>
+                                    <t t-elif="o.meeting_type == 'annual'">ANNUAL SHAREHOLDERS MEETING MINUTES</t>
+                                    <t t-elif="o.meeting_type == 'extraordinary'">EXTRAORDINARY SHAREHOLDERS MEETING MINUTES</t>
+                                    <t t-else="1">MEETING MINUTES</t>
+                                </h2>
+                                <h3><span t-field="o.name"/></h3>
+                            </div>
+                            
+                            <div class="row mt-4 mb-4">
+                                <div class="col-6">
+                                    <p><strong>Date and Time:</strong> <span t-field="o.meeting_date"/></p>
+                                    <p><strong>Location:</strong> <span t-field="o.location"/></p>
+                                </div>
+                                <div class="col-6">
+                                    <p><strong>Book:</strong> <span t-field="o.book_id.name"/></p>
+                                    <p><strong>Folios:</strong> <span t-field="o.folio_start"/> to <span t-field="o.folio_end"/></p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <t t-if="o.meeting_type == 'board'">
+                                        <h4>Attendees:</h4>
+                                        <ul>
+                                            <t t-foreach="o.attendee_ids" t-as="attendee">
+                                                <li><span t-field="attendee.name"/></li>
+                                            </t>
+                                        </ul>
+                                    </t>
+                                    <t t-else="1">
+                                        <h4>Present Shareholders:</h4>
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Shareholder</th>
+                                                    <th class="text-right">Shares</th>
+                                                    <th class="text-right">Percentage</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="o.present_shareholder_ids" t-as="shareholder">
+                                                    <tr>
+                                                        <td><span t-field="shareholder.name"/></td>
+                                                        <td class="text-right"><span t-field="shareholder.shares_count"/></td>
+                                                        <td class="text-right"><span t-field="shareholder.share_percentage"/>%</td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                        <p class="text-right"><strong>Quorum: <span t-field="o.quorum"/>%</strong></p>
+                                    </t>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h4>Meeting Officers:</h4>
+                                    <p><strong>President:</strong> <span t-field="o.president_id.name"/></p>
+                                    <p><strong>Secretary:</strong> <span t-field="o.secretary_id.name"/></p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h4>Agenda:</h4>
+                                    <div t-field="o.agenda_items"/>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h4>Minute Content:</h4>
+                                    <div t-field="o.content"/>
+                                </div>
+                            </div>
+                            
+                            <t t-if="o.conclusions">
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h4>Conclusions and Resolutions:</h4>
+                                        <div t-field="o.conclusions"/>
+                                    </div>
+                                </div>
+                            </t>
+                            
+                            <div class="row mt-5">
+                                <div class="col-12">
+                                    <h4>Signatures:</h4>
+                                    <table class="table table-bordered">
+                                        <t t-foreach="o.signature_ids" t-as="signature">
+                                            <tr>
+                                                <td width="50%">
+                                                    <p><strong><span t-field="signature.role"/>:</strong> <span t-field="signature.partner_id.name"/></p>
+                                                    <p>Date: <span t-field="signature.signature_date"/></p>
+                                                    <p class="mt-4">Signature: _______________________</p>
+                                                </td>
+                                                <td width="50%">
+                                                    <t t-if="signature.notes">
+                                                        <p><strong>Notes:</strong></p>
+                                                        <p><span t-field="signature.notes"/></p>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center mt-5 small">
+                                <p>This document is a faithful transcription of the original minute recorded in the <span t-field="o.book_id.name"/> 
+                                (<span t-field="o.book_id.book_number"/>), folios <span t-field="o.folio_start"/> to <span t-field="o.folio_end"/>.</p>
+                                <p>Company: <span t-field="o.company_id.name"/></p>
+                                <p>Generated on: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/></p>
+                            </div>
+                            
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Meeting Minute Form View -->
+        <record id="view_meeting_minute_form" model="ir.ui.view">
+            <field name="name">ar.meeting.minute.form</field>
+            <field name="model">ar.meeting.minute</field>
+            <field name="arch" type="xml">
+                <form string="Meeting Minute">
+                    <header>
+                        <button name="action_confirm" string="Confirm" type="object" 
+                                class="oe_highlight" states="draft"/>
+                        <button name="action_approve" string="Approve" type="object" 
+                                class="oe_highlight" states="confirmed"/>
+                        <button name="action_cancel" string="Cancel" type="object" 
+                                states="draft,confirmed"/>
+                        <button name="action_draft" string="Set to Draft" type="object" 
+                                states="canceled"/>
+                        <button name="action_generate_pdf" string="Generate PDF" type="object" 
+                                states="confirmed,approved"/>
+                        <button name="action_add_signature" string="Add Signature" type="object" 
+                                states="confirmed,approved"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,approved"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_attendees" type="object" class="oe_stat_button" 
+                                    icon="fa-users" attrs="{'invisible': [('attendee_ids', '=', [])]}">
+                                <field name="attendee_ids" widget="statinfo" string="Attendees"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="meeting_date"/>
+                                <field name="meeting_type"/>
+                                <field name="book_id"/>
+                                <field name="location"/>
+                                <field name="president_id"/>
+                                <field name="secretary_id"/>
+                            </group>
+                            <group>
+                                <field name="folio_start"/>
+                                <field name="folio_end"/>
+                                <field name="folios_count" readonly="1"/>
+                                <field name="quorum" widget="percentage"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Agenda">
+                                <field name="agenda_items" placeholder="Meeting agenda items..."/>
+                            </page>
+                            <page string="Content">
+                                <field name="content" placeholder="Detailed meeting minutes content..."/>
+                            </page>
+                            <page string="Conclusions">
+                                <field name="conclusions" placeholder="Meeting conclusions and agreements..."/>
+                            </page>
+                            <page string="Attendees" attrs="{'invisible': [('meeting_type', '!=', 'board')]}">
+                                <field name="attendee_ids" widget="many2many_tags"/>
+                            </page>
+                            <page string="Present Shareholders" attrs="{'invisible': [('meeting_type', '=', 'board')]}">
+                                <field name="present_shareholder_ids"/>
+                            </page>
+                            <page string="Signatures">
+                                <field name="signature_ids">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="partner_id"/>
+                                        <field name="role"/>
+                                        <field name="signature_date"/>
+                                        <field name="notes"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Attachments">
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Meeting Minute Tree View -->
+        <record id="view_meeting_minute_tree" model="ir.ui.view">
+            <field name="name">ar.meeting.minute.tree</field>
+            <field name="model">ar.meeting.minute</field>
+            <field name="arch" type="xml">
+                <tree string="Meeting Minutes" decoration-muted="state == 'canceled'" decoration-info="state == 'draft'" decoration-bf="state == 'approved'">
+                    <field name="name"/>
+                    <field name="meeting_date"/>
+                    <field name="meeting_type"/>
+                    <field name="book_id"/>
+                    <field name="location"/>
+                    <field name="folio_start"/>
+                    <field name="folio_end"/>
+                    <field name="president_id"/>
+                    <field name="quorum" widget="percentage"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Meeting Minute Search View -->
+        <record id="view_meeting_minute_search" model="ir.ui.view">
+            <field name="name">ar.meeting.minute.search</field>
+            <field name="model">ar.meeting.minute</field>
+            <field name="arch" type="xml">
+                <search string="Search Meeting Minutes">
+                    <field name="name"/>
+                    <field name="book_id"/>
+                    <field name="president_id"/>
+                    <field name="secretary_id"/>
+                    <field name="location"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                    <filter string="Canceled" name="canceled" domain="[('state', '=', 'canceled')]"/>
+                    <separator/>
+                    <filter string="Board Meetings" name="board_meetings" domain="[('meeting_type', '=', 'board')]"/>
+                    <filter string="Shareholder Meetings" name="shareholder_meetings" domain="[('meeting_type', 'in', ['annual', 'extraordinary'])]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Meeting Type" name="groupby_type" domain="[]" context="{'group_by': 'meeting_type'}"/>
+                        <filter string="Book" name="groupby_book" domain="[]" context="{'group_by': 'book_id'}"/>
+                        <filter string="Status" name="groupby_state" domain="[]" context="{'group_by': 'state'}"/>
+                        <filter string="Date" name="groupby_date" domain="[]" context="{'group_by': 'meeting_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Meeting Minute Calendar View -->
+        <record id="view_meeting_minute_calendar" model="ir.ui.view">
+            <field name="name">ar.meeting.minute.calendar</field>
+            <field name="model">ar.meeting.minute</field>
+            <field name="arch" type="xml">
+                <calendar string="Meeting Minutes" date_start="meeting_date" color="meeting_type">
+                    <field name="name"/>
+                    <field name="location"/>
+                    <field name="meeting_type"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Meeting Minute Actions -->
+        <record id="action_meeting_minute" model="ir.actions.act_window">
+            <field name="name">Meeting Minutes</field>
+            <field name="res_model">ar.meeting.minute</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="search_view_id" ref="view_meeting_minute_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first meeting minute
+                </p>
+                <p>
+                    Record and manage board and shareholder meeting minutes according to Argentine regulations.
+                </p>
+            </field>
+        </record>
+
+        <!-- Board Meeting Minutes Action -->
+        <record id="action_board_meeting_minutes" model="ir.actions.act_window">
+            <field name="name">Board Meeting Minutes</field>
+            <field name="res_model">ar.meeting.minute</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="domain">[('meeting_type', '=', 'board')]</field>
+            <field name="context">{'default_meeting_type': 'board', 'search_default_board_meetings': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first board meeting minute
+                </p>
+                <p>
+                    Record and manage board meeting minutes.
+                </p>
+            </field>
+        </record>
+
+        <!-- Shareholder Meeting Minutes Action -->
+        <record id="action_shareholder_meeting_minutes" model="ir.actions.act_window">
+            <field name="name">Shareholder Meeting Minutes</field>
+            <field name="res_model">ar.meeting.minute</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="domain">[('meeting_type', 'in', ['annual', 'extraordinary'])]</field>
+            <field name="context">{'default_meeting_type': 'annual', 'search_default_shareholder_meetings': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first shareholder meeting minute
+                </p>
+                <p>
+                    Record and manage shareholder meeting minutes.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

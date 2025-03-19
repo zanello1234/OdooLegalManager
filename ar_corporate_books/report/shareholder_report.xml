@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="shareholder_certificate_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            
+                            <div class="text-center mb-5">
+                                <h2>SHAREHOLDER CERTIFICATE</h2>
+                                <h3><span t-field="o.company_id.name"/></h3>
+                            </div>
+                            
+                            <div class="row mb-5">
+                                <div class="col-6">
+                                    <p><strong>Certificate Number:</strong> SC-<span t-field="o.shareholder_number"/></p>
+                                    <p><strong>Issue Date:</strong> <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/></p>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p><strong>Book:</strong> <span t-field="o.book_id.name"/></p>
+                                    <p><strong>Folio:</strong> <span t-field="o.folio_number"/></p>
+                                </div>
+                            </div>
+                            
+                            <p class="text-justify">
+                                This document certifies that <strong><span t-field="o.name"/></strong>
+                                <t t-if="o.identification_type">
+                                    with <span t-field="o.identification_type"/> number <span t-field="o.identification_number"/>
+                                </t>
+                                is a registered shareholder of <strong><span t-field="o.company_id.name"/></strong> since 
+                                <span t-field="o.registration_date"/>.
+                            </p>
+                            
+                            <table class="table table-bordered mt-4">
+                                <tr>
+                                    <th class="table-active">Shareholder Number:</th>
+                                    <td><span t-field="o.shareholder_number"/></td>
+                                    <th class="table-active">Shareholder Type:</th>
+                                    <td><span t-field="o.shareholder_type"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Number of Shares:</th>
+                                    <td><span t-field="o.shares_count"/></td>
+                                    <th class="table-active">Share Percentage:</th>
+                                    <td><span t-field="o.share_percentage"/>%</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Share Value:</th>
+                                    <td><span t-field="o.share_value"/></td>
+                                    <th class="table-active">Total Investment:</th>
+                                    <td><span t-field="o.total_investment"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Status:</th>
+                                    <td colspan="3"><span t-field="o.state"/></td>
+                                </tr>
+                            </table>
+                            
+                            <div t-if="o.transaction_ids">
+                                <h4 class="mt-5">Share Transaction History:</h4>
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Transaction</th>
+                                            <th>Shares</th>
+                                            <th>Amount</th>
+                                            <th>Counterpart</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="o.transaction_ids.filtered(lambda x: x.state == 'confirmed').sorted(key=lambda r: r.date)" t-as="transaction">
+                                            <tr>
+                                                <td><span t-field="transaction.date"/></td>
+                                                <td><span t-field="transaction.transaction_type"/></td>
+                                                <td><span t-field="transaction.shares_count"/></td>
+                                                <td><span t-field="transaction.total_amount"/></td>
+                                                <td><span t-field="transaction.partner_id.name"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="row mt-5">
+                                <div class="col-6">
+                                    <p>Company Seal:</p>
+                                    <div class="border border-dark" style="height: 100px; width: 200px;"></div>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p>Legal Representative:</p>
+                                    <div class="mt-5 pt-4">
+                                        <hr style="width: 200px; border-top: 1px solid #000; display: inline-block;"/>
+                                        <p>Signature and Seal</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center small mt-5 pt-5">
+                                <p>This certificate is issued in accordance with the company's bylaws and Argentine regulations.</p>
+                                <p>Registered in <span t-field="o.book_id.name"/> book, folio <span t-field="o.folio_number"/>.</p>
+                            </div>
+                            
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

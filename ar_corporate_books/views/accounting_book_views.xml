@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Accounting Book Form View -->
+        <record id="view_accounting_book_form" model="ir.ui.view">
+            <field name="name">ar.accounting.book.form</field>
+            <field name="model">ar.accounting.book</field>
+            <field name="arch" type="xml">
+                <form string="Accounting Book Entry">
+                    <header>
+                        <button name="action_post" string="Post" type="object" 
+                                class="oe_highlight" states="draft"/>
+                        <button name="action_cancel" string="Cancel" type="object" 
+                                states="draft,posted"/>
+                        <button name="action_create_move" string="Create Journal Entry" type="object" 
+                                attrs="{'invisible': ['|', ('move_id', '!=', False), ('state', '!=', 'posted')]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_move" type="object" class="oe_stat_button" 
+                                    icon="fa-pencil-square-o" attrs="{'invisible': [('move_id', '=', False)]}">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Journal Entry</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Entry Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date"/>
+                                <field name="book_id"/>
+                                <field name="entry_number"/>
+                                <field name="folio_number"/>
+                                <field name="partner_id"/>
+                            </group>
+                            <group>
+                                <field name="amount"/>
+                                <field name="currency_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="account_id"/>
+                                <field name="move_id" readonly="1"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description">
+                                <field name="description" placeholder="Describe the accounting entry..."/>
+                            </page>
+                            <page string="Attachments">
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Accounting Book Tree View -->
+        <record id="view_accounting_book_tree" model="ir.ui.view">
+            <field name="name">ar.accounting.book.tree</field>
+            <field name="model">ar.accounting.book</field>
+            <field name="arch" type="xml">
+                <tree string="Accounting Book Entries" decoration-muted="state == 'canceled'" decoration-info="state == 'draft'">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="book_id"/>
+                    <field name="entry_number"/>
+                    <field name="folio_number"/>
+                    <field name="partner_id"/>
+                    <field name="amount"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Accounting Book Search View -->
+        <record id="view_accounting_book_search" model="ir.ui.view">
+            <field name="name">ar.accounting.book.search</field>
+            <field name="model">ar.accounting.book</field>
+            <field name="arch" type="xml">
+                <search string="Search Accounting Book Entries">
+                    <field name="name"/>
+                    <field name="entry_number"/>
+                    <field name="book_id"/>
+                    <field name="partner_id"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Posted" name="posted" domain="[('state', '=', 'posted')]"/>
+                    <filter string="Canceled" name="canceled" domain="[('state', '=', 'canceled')]"/>
+                    <separator/>
+                    <filter string="Journal Book" name="journal_book" domain="[('book_id.book_type', '=', 'journal')]"/>
+                    <filter string="Ledger Book" name="ledger_book" domain="[('book_id.book_type', '=', 'ledger')]"/>
+                    <filter string="Inventory Book" name="inventory_book" domain="[('book_id.book_type', '=', 'inventory')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Book" name="groupby_book" domain="[]" context="{'group_by': 'book_id'}"/>
+                        <filter string="Status" name="groupby_state" domain="[]" context="{'group_by': 'state'}"/>
+                        <filter string="Date" name="groupby_date" domain="[]" context="{'group_by': 'date'}"/>
+                        <filter string="Partner" name="groupby_partner" domain="[]" context="{'group_by': 'partner_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Accounting Book Calendar View -->
+        <record id="view_accounting_book_calendar" model="ir.ui.view">
+            <field name="name">ar.accounting.book.calendar</field>
+            <field name="model">ar.accounting.book</field>
+            <field name="arch" type="xml">
+                <calendar string="Accounting Book Entries" date_start="date" color="book_id">
+                    <field name="name"/>
+                    <field name="entry_number"/>
+                    <field name="amount"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Accounting Book Action -->
+        <record id="action_accounting_book" model="ir.actions.act_window">
+            <field name="name">Accounting Books</field>
+            <field name="res_model">ar.accounting.book</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="search_view_id" ref="view_accounting_book_search"/>
+            <field name="context">{'search_default_posted': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first accounting book entry
+                </p>
+                <p>
+                    Record entries in your accounting books according to Argentine regulations.
+                </p>
+            </field>
+        </record>
+
+        <!-- Action for Journal Book entries -->
+        <record id="action_journal_book_entries" model="ir.actions.act_window">
+            <field name="name">Journal Book Entries</field>
+            <field name="res_model">ar.accounting.book</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="domain">[('book_id.book_type', '=', 'journal')]</field>
+            <field name="context">{'default_book_id': context.get('book_id', False), 'search_default_journal_book': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first journal book entry
+                </p>
+                <p>
+                    Record entries in your journal book according to Argentine regulations.
+                </p>
+            </field>
+        </record>
+
+        <!-- Action for Ledger Book entries -->
+        <record id="action_ledger_book_entries" model="ir.actions.act_window">
+            <field name="name">Ledger Book Entries</field>
+            <field name="res_model">ar.accounting.book</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="domain">[('book_id.book_type', '=', 'ledger')]</field>
+            <field name="context">{'default_book_id': context.get('book_id', False), 'search_default_ledger_book': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first ledger book entry
+                </p>
+                <p>
+                    Record entries in your ledger book according to Argentine regulations.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

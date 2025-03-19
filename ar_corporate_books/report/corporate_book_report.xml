@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="corporate_book_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <h2 class="text-center mb-4">Corporate Book Certificate</h2>
+                            
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th class="table-active">Book Name:</th>
+                                    <td><span t-field="o.name"/></td>
+                                    <th class="table-active">Book Number:</th>
+                                    <td><span t-field="o.book_number"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Book Type:</th>
+                                    <td><span t-field="o.book_type"/></td>
+                                    <th class="table-active">Status:</th>
+                                    <td><span t-field="o.state"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Rubric Number:</th>
+                                    <td><span t-field="o.rubric_number"/></td>
+                                    <th class="table-active">Rubric Date:</th>
+                                    <td><span t-field="o.rubric_date"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Start Date:</th>
+                                    <td><span t-field="o.start_date"/></td>
+                                    <th class="table-active">End Date:</th>
+                                    <td><span t-field="o.end_date"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Total Folios:</th>
+                                    <td><span t-field="o.folios"/></td>
+                                    <th class="table-active">Folios Used:</th>
+                                    <td><span t-field="o.folios_used"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Current Folio:</th>
+                                    <td><span t-field="o.current_folio"/></td>
+                                    <th class="table-active">Issuing Authority:</th>
+                                    <td><span t-field="o.authority_id"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Company:</th>
+                                    <td colspan="3"><span t-field="o.company_id"/></td>
+                                </tr>
+                            </table>
+                            
+                            <div t-if="o.notes" class="mt-4">
+                                <h4>Notes:</h4>
+                                <p t-field="o.notes"/>
+                            </div>
+                            
+                            <div class="row mt-5">
+                                <div class="col-6">
+                                    <p>Issued on: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/></p>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p>Company Seal: ____________________</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-5">
+                                <div class="col-6">
+                                    <p>Authorized Signature: ____________________</p>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p>Name and Position: ____________________</p>
+                                </div>
+                            </div>
+                            
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

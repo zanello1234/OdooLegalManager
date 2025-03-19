@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Paper formats -->
+        <record id="paperformat_ar_legal" model="report.paperformat">
+            <field name="name">Argentine Legal</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">15</field>
+            <field name="margin_right">15</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">15</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <!-- Report Actions -->
+        <record id="action_report_corporate_book" model="ir.actions.report">
+            <field name="name">Corporate Book</field>
+            <field name="model">ar.corporate.book</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ar_corporate_books.corporate_book_report_template</field>
+            <field name="report_file">ar_corporate_books.corporate_book_report_template</field>
+            <field name="print_report_name">'Corporate Book - %s' % object.name</field>
+            <field name="binding_model_id" ref="model_ar_corporate_book"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="paperformat_ar_legal"/>
+        </record>
+
+        <record id="action_report_accounting_book" model="ir.actions.report">
+            <field name="name">Accounting Book</field>
+            <field name="model">ar.accounting.book</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ar_corporate_books.accounting_book_report_template</field>
+            <field name="report_file">ar_corporate_books.accounting_book_report_template</field>
+            <field name="print_report_name">'Accounting Entry - %s' % object.name</field>
+            <field name="binding_model_id" ref="model_ar_accounting_book"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="paperformat_ar_legal"/>
+        </record>
+
+        <record id="action_report_meeting_minute" model="ir.actions.report">
+            <field name="name">Meeting Minute</field>
+            <field name="model">ar.meeting.minute</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ar_corporate_books.meeting_minute_report_template</field>
+            <field name="report_file">ar_corporate_books.meeting_minute_report_template</field>
+            <field name="print_report_name">'Meeting Minute - %s' % object.name</field>
+            <field name="binding_model_id" ref="model_ar_meeting_minute"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="paperformat_ar_legal"/>
+        </record>
+
+        <record id="action_report_shareholder_certificate" model="ir.actions.report">
+            <field name="name">Shareholder Certificate</field>
+            <field name="model">ar.shareholder</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ar_corporate_books.shareholder_certificate_template</field>
+            <field name="report_file">ar_corporate_books.shareholder_certificate_template</field>
+            <field name="print_report_name">'Shareholder Certificate - %s' % object.name</field>
+            <field name="binding_model_id" ref="model_ar_shareholder"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="paperformat_ar_legal"/>
+        </record>
+
+        <record id="action_report_attendance_certificate" model="ir.actions.report">
+            <field name="name">Attendance Certificate</field>
+            <field name="model">ar.assembly.attendance</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ar_corporate_books.attendance_certificate_template</field>
+            <field name="report_file">ar_corporate_books.attendance_certificate_template</field>
+            <field name="print_report_name">'Attendance Certificate - %s' % object.name</field>
+            <field name="binding_model_id" ref="model_ar_assembly_attendance"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="paperformat_ar_legal"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Category -->
+        <record id="module_category_corporate_books" model="ir.module.category">
+            <field name="name">Corporate Books</field>
+            <field name="description">Helps you manage corporate and accounting books according to Argentine regulations</field>
+            <field name="sequence">80</field>
+        </record>
+
+        <!-- Corporate Books User Group -->
+        <record id="group_corporate_books_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_corporate_books"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Corporate Books Manager Group -->
+        <record id="group_corporate_books_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_corporate_books"/>
+            <field name="implied_ids" eval="[(4, ref('group_corporate_books_user'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <!-- Multi-company rules -->
+        <record id="corporate_book_company_rule" model="ir.rule">
+            <field name="name">Corporate Books: multi-company rule</field>
+            <field name="model_id" ref="model_ar_corporate_book"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="accounting_book_company_rule" model="ir.rule">
+            <field name="name">Accounting Books: multi-company rule</field>
+            <field name="model_id" ref="model_ar_accounting_book"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="book_inventory_company_rule" model="ir.rule">
+            <field name="name">Book Inventory: multi-company rule</field>
+            <field name="model_id" ref="model_ar_book_inventory"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="meeting_minute_company_rule" model="ir.rule">
+            <field name="name">Meeting Minutes: multi-company rule</field>
+            <field name="model_id" ref="model_ar_meeting_minute"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="shareholder_company_rule" model="ir.rule">
+            <field name="name">Shareholders: multi-company rule</field>
+            <field name="model_id" ref="model_ar_shareholder"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="shareholder_transaction_company_rule" model="ir.rule">
+            <field name="name">Shareholder Transactions: multi-company rule</field>
+            <field name="model_id" ref="model_ar_shareholder_transaction"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="assembly_attendance_company_rule" model="ir.rule">
+            <field name="name">Assembly Attendance: multi-company rule</field>
+            <field name="model_id" ref="model_ar_assembly_attendance"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

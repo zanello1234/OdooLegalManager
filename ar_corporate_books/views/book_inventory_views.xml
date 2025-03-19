@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Book Inventory Form View -->
+        <record id="view_book_inventory_form" model="ir.ui.view">
+            <field name="name">ar.book.inventory.form</field>
+            <field name="model">ar.book.inventory</field>
+            <field name="arch" type="xml">
+                <form string="Book Inventory">
+                    <header>
+                        <button name="action_validate" string="Validate" type="object" 
+                                class="oe_highlight" states="draft"/>
+                        <button name="action_cancel" string="Cancel" type="object" 
+                                states="draft,validated"/>
+                        <button name="action_draft" string="Set to Draft" type="object" 
+                                states="canceled"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,validated"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date"/>
+                                <field name="book_id"/>
+                                <field name="folio_start"/>
+                                <field name="folio_end"/>
+                                <field name="folios_count" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="item_value"/>
+                                <field name="currency_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="location_id"/>
+                                <field name="responsible_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description">
+                                <field name="item_description" placeholder="Describe the inventory item..."/>
+                            </page>
+                            <page string="Attachments">
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Book Inventory Tree View -->
+        <record id="view_book_inventory_tree" model="ir.ui.view">
+            <field name="name">ar.book.inventory.tree</field>
+            <field name="model">ar.book.inventory</field>
+            <field name="arch" type="xml">
+                <tree string="Book Inventory" decoration-muted="state == 'canceled'" decoration-info="state == 'draft'">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="book_id"/>
+                    <field name="folio_start"/>
+                    <field name="folio_end"/>
+                    <field name="folios_count"/>
+                    <field name="item_value"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="responsible_id"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Book Inventory Search View -->
+        <record id="view_book_inventory_search" model="ir.ui.view">
+            <field name="name">ar.book.inventory.search</field>
+            <field name="model">ar.book.inventory</field>
+            <field name="arch" type="xml">
+                <search string="Search Book Inventory">
+                    <field name="name"/>
+                    <field name="book_id"/>
+                    <field name="responsible_id"/>
+                    <field name="location_id"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Validated" name="validated" domain="[('state', '=', 'validated')]"/>
+                    <filter string="Canceled" name="canceled" domain="[('state', '=', 'canceled')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Book" name="groupby_book" domain="[]" context="{'group_by': 'book_id'}"/>
+                        <filter string="Status" name="groupby_state" domain="[]" context="{'group_by': 'state'}"/>
+                        <filter string="Date" name="groupby_date" domain="[]" context="{'group_by': 'date'}"/>
+                        <filter string="Responsible" name="groupby_responsible" domain="[]" context="{'group_by': 'responsible_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Book Inventory Action -->
+        <record id="action_book_inventory" model="ir.actions.act_window">
+            <field name="name">Book Inventory</field>
+            <field name="res_model">ar.book.inventory</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_book_inventory_search"/>
+            <field name="context">{'search_default_validated': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first book inventory entry
+                </p>
+                <p>
+                    Manage your company's inventory records in official books according to Argentine regulations.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

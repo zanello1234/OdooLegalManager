@@ -1,0 +1,33 @@
+modules = ["postgresql-16", "python-3.11"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Module Structure Check"
+
+[[workflows.workflow]]
+name = "Module Structure Check"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "find ar_corporate_books -type f | sort"
+
+[deployment]
+run = ["sh", "-c", "python -m odoo --addons-path=. -d odoo -i ar_corporate_books --stop-after-init"]

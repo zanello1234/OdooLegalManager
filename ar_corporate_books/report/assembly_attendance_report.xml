@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="attendance_certificate_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            
+                            <div class="text-center mb-5">
+                                <h2>ATTENDANCE CERTIFICATE</h2>
+                                <h3 t-if="o.meeting_type == 'annual'">ANNUAL SHAREHOLDERS MEETING</h3>
+                                <h3 t-elif="o.meeting_type == 'extraordinary'">EXTRAORDINARY SHAREHOLDERS MEETING</h3>
+                                <h3 t-else="">SHAREHOLDERS MEETING</h3>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-6">
+                                    <p><strong>Meeting:</strong> <span t-field="o.meeting_id.name"/></p>
+                                    <p><strong>Date and Time:</strong> <span t-field="o.meeting_date"/></p>
+                                    <p><strong>Location:</strong> <span t-field="o.meeting_id.location"/></p>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p><strong>Book:</strong> <span t-field="o.book_id.name"/></p>
+                                    <p><strong>Folio:</strong> <span t-field="o.folio_number"/></p>
+                                    <p><strong>Status:</strong> <span t-field="o.state"/></p>
+                                </div>
+                            </div>
+                            
+                            <p class="text-justify">
+                                This document certifies that the shareholder <strong><span t-field="o.shareholder_id.name"/></strong>
+                                <span t-if="o.attendance_type == 'in_person'">
+                                    attended in person
+                                </span>
+                                <span t-elif="o.attendance_type == 'proxy'">
+                                    was represented by <strong><span t-field="o.proxy_id.name"/></strong>
+                                </span>
+                                <span t-elif="o.attendance_type == 'remote'">
+                                    attended remotely
+                                </span>
+                                <span t-elif="o.attendance_type == 'written_vote'">
+                                    participated by written vote
+                                </span>
+                                the meeting <strong><span t-field="o.meeting_id.name"/></strong> held on 
+                                <span t-field="o.meeting_date" t-options='{"widget": "date"}'/>.
+                            </p>
+                            
+                            <table class="table table-bordered mt-4">
+                                <tr>
+                                    <th class="table-active">Shareholder:</th>
+                                    <td><span t-field="o.shareholder_id.name"/></td>
+                                    <th class="table-active">Shareholder Number:</th>
+                                    <td><span t-field="o.shareholder_id.shareholder_number"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Attendance Type:</th>
+                                    <td><span t-field="o.attendance_type"/></td>
+                                    <th class="table-active" t-if="o.attendance_type == 'proxy'">Proxy:</th>
+                                    <td t-if="o.attendance_type == 'proxy'"><span t-field="o.proxy_id.name"/></td>
+                                    <th class="table-active" t-if="o.attendance_type != 'proxy'">Arrival Time:</th>
+                                    <td t-if="o.attendance_type != 'proxy'"><span t-field="o.arrival_time"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Shares Represented:</th>
+                                    <td><span t-field="o.shares_represented"/></td>
+                                    <th class="table-active">Share Percentage:</th>
+                                    <td><span t-field="o.share_percentage"/>%</td>
+                                </tr>
+                            </table>
+                            
+                            <div class="row mt-5">
+                                <div class="col-6">
+                                    <p>Issue Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/></p>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p>Certificate Number: ATT-<span t-esc="o.id"/>-<span t-esc="datetime.datetime.now().strftime('%Y%m')"/></p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-5">
+                                <div class="col-6">
+                                    <p>Meeting President:</p>
+                                    <div class="mt-5 pt-4">
+                                        <hr style="width: 200px; border-top: 1px solid #000; display: inline-block;"/>
+                                        <p><span t-field="o.meeting_id.president_id.name"/></p>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p>Meeting Secretary:</p>
+                                    <div class="mt-5 pt-4">
+                                        <hr style="width: 200px; border-top: 1px solid #000; display: inline-block;"/>
+                                        <p><span t-field="o.meeting_id.secretary_id.name"/></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center small mt-5 pt-5">
+                                <p>This certificate is issued in accordance with the company's bylaws and Argentine regulations.</p>
+                                <p>Registered in <span t-field="o.book_id.name"/> book, folio <span t-field="o.folio_number"/>.</p>
+                                <p>Company: <span t-field="o.company_id.name"/></p>
+                            </div>
+                            
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

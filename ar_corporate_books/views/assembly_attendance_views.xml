@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Assembly Attendance Form View -->
+        <record id="view_assembly_attendance_form" model="ir.ui.view">
+            <field name="name">ar.assembly.attendance.form</field>
+            <field name="model">ar.assembly.attendance</field>
+            <field name="arch" type="xml">
+                <form string="Assembly Attendance">
+                    <header>
+                        <button name="action_register" string="Register" type="object" 
+                                class="oe_highlight" states="draft"/>
+                        <button name="action_cancel" string="Cancel" type="object" 
+                                states="draft,registered"/>
+                        <button name="action_draft" string="Set to Draft" type="object" 
+                                states="cancelled"/>
+                        <button name="action_print_certificate" string="Print Certificate" type="object" 
+                                states="registered"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,registered"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="meeting_id"/>
+                                <field name="meeting_date"/>
+                                <field name="meeting_type"/>
+                                <field name="shareholder_id"/>
+                                <field name="attendance_type"/>
+                                <field name="proxy_id" attrs="{'invisible': [('attendance_type', '!=', 'proxy')], 'required': [('attendance_type', '=', 'proxy')]}"/>
+                            </group>
+                            <group>
+                                <field name="shares_represented"/>
+                                <field name="share_percentage" widget="percentage" readonly="1"/>
+                                <field name="book_id"/>
+                                <field name="folio_number"/>
+                                <field name="arrival_time"/>
+                                <field name="departure_time"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Notes">
+                                <field name="notes" placeholder="Attendance notes..."/>
+                            </page>
+                            <page string="Attendance Proof" attrs="{'invisible': [('attendance_type', 'not in', ['proxy', 'written_vote', 'remote'])]}">
+                                <group>
+                                    <field name="attendance_proof" filename="attendance_proof_filename"/>
+                                    <field name="attendance_proof_filename" invisible="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Assembly Attendance Tree View -->
+        <record id="view_assembly_attendance_tree" model="ir.ui.view">
+            <field name="name">ar.assembly.attendance.tree</field>
+            <field name="model">ar.assembly.attendance</field>
+            <field name="arch" type="xml">
+                <tree string="Assembly Attendances" decoration-muted="state == 'cancelled'" decoration-info="state == 'draft'">
+                    <field name="meeting_id"/>
+                    <field name="meeting_date"/>
+                    <field name="meeting_type"/>
+                    <field name="shareholder_id"/>
+                    <field name="attendance_type"/>
+                    <field name="shares_represented" sum="Total Shares"/>
+                    <field name="share_percentage" widget="percentage" avg="Average Percentage"/>
+                    <field name="book_id"/>
+                    <field name="folio_number"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Assembly Attendance Search View -->
+        <record id="view_assembly_attendance_search" model="ir.ui.view">
+            <field name="name">ar.assembly.attendance.search</field>
+            <field name="model">ar.assembly.attendance</field>
+            <field name="arch" type="xml">
+                <search string="Search Assembly Attendances">
+                    <field name="meeting_id"/>
+                    <field name="shareholder_id"/>
+                    <field name="proxy_id"/>
+                    <field name="book_id"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Registered" name="registered" domain="[('state', '=', 'registered')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                    <separator/>
+                    <filter string="In Person" name="in_person" domain="[('attendance_type', '=', 'in_person')]"/>
+                    <filter string="By Proxy" name="by_proxy" domain="[('attendance_type', '=', 'proxy')]"/>
+                    <filter string="Remote" name="remote" domain="[('attendance_type', '=', 'remote')]"/>
+                    <filter string="Written Vote" name="written_vote" domain="[('attendance_type', '=', 'written_vote')]"/>
+                    <separator/>
+                    <filter string="Annual Meetings" name="annual" domain="[('meeting_type', '=', 'annual')]"/>
+                    <filter string="Extraordinary Meetings" name="extraordinary" domain="[('meeting_type', '=', 'extraordinary')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Meeting" name="groupby_meeting" domain="[]" context="{'group_by': 'meeting_id'}"/>
+                        <filter string="Shareholder" name="groupby_shareholder" domain="[]" context="{'group_by': 'shareholder_id'}"/>
+                        <filter string="Attendance Type" name="groupby_type" domain="[]" context="{'group_by': 'attendance_type'}"/>
+                        <filter string="Status" name="groupby_state" domain="[]" context="{'group_by': 'state'}"/>
+                        <filter string="Meeting Date" name="groupby_date" domain="[]" context="{'group_by': 'meeting_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Assembly Attendance Calendar View -->
+        <record id="view_assembly_attendance_calendar" model="ir.ui.view">
+            <field name="name">ar.assembly.attendance.calendar</field>
+            <field name="model">ar.assembly.attendance</field>
+            <field name="arch" type="xml">
+                <calendar string="Assembly Attendances" date_start="meeting_date" color="attendance_type">
+                    <field name="meeting_id"/>
+                    <field name="shareholder_id"/>
+                    <field name="attendance_type"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Assembly Attendance Pivot View -->
+        <record id="view_assembly_attendance_pivot" model="ir.ui.view">
+            <field name="name">ar.assembly.attendance.pivot</field>
+            <field name="model">ar.assembly.attendance</field>
+            <field name="arch" type="xml">
+                <pivot string="Assembly Attendance Analysis">
+                    <field name="meeting_id" type="row"/>
+                    <field name="attendance_type" type="col"/>
+                    <field name="shares_represented" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Assembly Attendance Graph View -->
+        <record id="view_assembly_attendance_graph" model="ir.ui.view">
+            <field name="name">ar.assembly.attendance.graph</field>
+            <field name="model">ar.assembly.attendance</field>
+            <field name="arch" type="xml">
+                <graph string="Assembly Attendance Analysis">
+                    <field name="meeting_id"/>
+                    <field name="shares_represented" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Assembly Attendance Action -->
+        <record id="action_assembly_attendance" model="ir.actions.act_window">
+            <field name="name">Assembly Attendances</field>
+            <field name="res_model">ar.assembly.attendance</field>
+            <field name="view_mode">tree,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="view_assembly_attendance_search"/>
+            <field name="context">{'search_default_registered': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first assembly attendance record
+                </p>
+                <p>
+                    Track shareholder attendance at meetings according to Argentine regulations.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

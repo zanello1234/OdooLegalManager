@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="accounting_book_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <h2 class="text-center mb-4">Accounting Book Entry</h2>
+                            
+                            <div class="row mb-4">
+                                <div class="col-6">
+                                    <h4><span t-field="o.name"/></h4>
+                                    <p>Entry Number: <span t-field="o.entry_number"/></p>
+                                    <p>Date: <span t-field="o.date"/></p>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p>Book: <span t-field="o.book_id.name"/></p>
+                                    <p>Folio: <span t-field="o.folio_number"/></p>
+                                    <p>Status: <span t-field="o.state"/></p>
+                                </div>
+                            </div>
+                            
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th class="table-active">Account:</th>
+                                    <td><span t-field="o.account_id"/></td>
+                                    <th class="table-active">Partner:</th>
+                                    <td><span t-field="o.partner_id"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Amount:</th>
+                                    <td><span t-field="o.amount"/></td>
+                                    <th class="table-active">Currency:</th>
+                                    <td><span t-field="o.currency_id"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Journal Entry:</th>
+                                    <td colspan="3"><span t-field="o.move_id"/></td>
+                                </tr>
+                                <tr>
+                                    <th class="table-active">Company:</th>
+                                    <td colspan="3"><span t-field="o.company_id"/></td>
+                                </tr>
+                            </table>
+                            
+                            <div class="mt-4">
+                                <h4>Description:</h4>
+                                <p t-field="o.description"/>
+                            </div>
+                            
+                            <div t-if="o.move_id" class="mt-4">
+                                <h4>Related Journal Entry Lines:</h4>
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Account</th>
+                                            <th>Partner</th>
+                                            <th>Label</th>
+                                            <th class="text-right">Debit</th>
+                                            <th class="text-right">Credit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="o.move_id.line_ids" t-as="line">
+                                            <tr>
+                                                <td><span t-field="line.account_id"/></td>
+                                                <td><span t-field="line.partner_id"/></td>
+                                                <td><span t-field="line.name"/></td>
+                                                <td class="text-right"><span t-field="line.debit"/></td>
+                                                <td class="text-right"><span t-field="line.credit"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="row mt-5">
+                                <div class="col-6">
+                                    <p>Issued on: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/></p>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p>Company Seal: ____________________</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-5">
+                                <div class="col-6">
+                                    <p>Accountant Signature: ____________________</p>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p>Legal Representative: ____________________</p>
+                                </div>
+                            </div>
+                            
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

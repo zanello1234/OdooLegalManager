@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Background -->
+  <rect width="256" height="256" fill="#9d57f1" rx="28" ry="28"/>
+  
+  <!-- Book stack - Bottom book -->
+  <rect x="36" y="140" width="184" height="36" fill="#6b2df3" rx="4" ry="4"/>
+  <rect x="36" y="140" width="184" height="8" fill="#5416d0"/>
+  
+  <!-- Book stack - Middle book -->
+  <rect x="48" y="104" width="172" height="36" fill="#4a49a3" rx="4" ry="4"/>
+  <rect x="48" y="104" width="172" height="8" fill="#3a388f"/>
+  
+  <!-- Book stack - Top book -->
+  <rect x="68" y="68" width="152" height="36" fill="#3b73af" rx="4" ry="4"/>
+  <rect x="68" y="68" width="152" height="8" fill="#2b5891"/>
+  
+  <!-- Document -->
+  <rect x="68" y="28" width="120" height="140" fill="#ffffff" rx="4" ry="4" />
+  
+  <!-- Document lines -->
+  <line x1="84" y1="52" x2="172" y2="52" stroke="#ddd" stroke-width="2"/>
+  <line x1="84" y1="72" x2="172" y2="72" stroke="#ddd" stroke-width="2"/>
+  <line x1="84" y1="92" x2="172" y2="92" stroke="#ddd" stroke-width="2"/>
+  <line x1="84" y1="112" x2="172" y2="112" stroke="#ddd" stroke-width="2"/>
+  <line x1="84" y1="132" x2="140" y2="132" stroke="#ddd" stroke-width="2"/>
+  
+  <!-- Argentinian flag colors on document corner -->
+  <path d="M 188 28 L 188 58 L 68 58 L 68 28 L 188 28 Z" fill="#74acdf" opacity="0.3"/>
+  <circle cx="128" cy="43" r="10" fill="#fcbf49" opacity="0.8"/>
+  
+  <!-- Book bookmark -->
+  <path d="M 160 28 L 176 28 L 176 60 L 168 52 L 160 60 Z" fill="#ff5252"/>
+</svg>

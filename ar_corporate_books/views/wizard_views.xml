@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Book Add Folios Wizard Form View -->
+        <record id="view_book_add_folios_wizard_form" model="ir.ui.view">
+            <field name="name">ar.book.add.folios.wizard.form</field>
+            <field name="model">ar.book.add.folios.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Add Folios to Book">
+                    <group>
+                        <group>
+                            <field name="book_id"/>
+                            <field name="current_folios"/>
+                        </group>
+                        <group>
+                            <field name="folios_to_add"/>
+                            <field name="date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason" placeholder="Reason for adding folios..."/>
+                    </group>
+                    <footer>
+                        <button name="action_add_folios" string="Add Folios" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Create Accounting Move Wizard Form View -->
+        <record id="view_create_accounting_move_wizard_form" model="ir.ui.view">
+            <field name="name">ar.create.accounting.move.wizard.form</field>
+            <field name="model">ar.create.accounting.move.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Create Journal Entry">
+                    <group>
+                        <group>
+                            <field name="accounting_book_id"/>
+                            <field name="journal_id"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="reference"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Journal Items">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="account_id"/>
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                                    <field name="debit"/>
+                                    <field name="credit"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                            <div>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="debit" sum="Total Debit" widget="monetary"/>
+                                    <field name="credit" sum="Total Credit" widget="monetary"/>
+                                </group>
+                            </div>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="action_create_move" string="Create Journal Entry" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Shareholder Transaction Wizard Form View -->
+        <record id="view_shareholder_transaction_wizard_form" model="ir.ui.view">
+            <field name="name">ar.shareholder.transaction.wizard.form</field>
+            <field name="model">ar.shareholder.transaction.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Add Share Transaction">
+                    <group>
+                        <group>
+                            <field name="shareholder_id"/>
+                            <field name="transaction_type"/>
+                            <field name="date"/>
+                            <field name="partner_id" attrs="{'required': [('transaction_type', 'in', ['purchase', 'sale', 'transfer_in', 'transfer_out'])]}"/>
+                        </group>
+                        <group>
+                            <field name="shares_count"/>
+                            <field name="share_price"/>
+                            <field name="total_amount" readonly="1"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="book_id"/>
+                            <field name="folio_number" attrs="{'required': [('book_id', '!=', False)]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" placeholder="Transaction notes..."/>
+                    </group>
+                    <footer>
+                        <button name="action_create_transaction" string="Create Transaction" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Meeting Minute Add Signature Wizard Form View -->
+        <record id="view_meeting_minute_add_signature_wizard_form" model="ir.ui.view">
+            <field name="name">ar.meeting.minute.add.signature.wizard.form</field>
+            <field name="model">ar.meeting.minute.add.signature.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Add Signature">
+                    <group>
+                        <group>
+                            <field name="minute_id"/>
+                            <field name="role"/>
+                            <field name="signature_date"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" placeholder="Signature notes..."/>
+                    </group>
+                    <footer>
+                        <button name="action_add_signature" string="Add Signature" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

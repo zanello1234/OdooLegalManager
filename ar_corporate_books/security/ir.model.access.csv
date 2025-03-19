@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ar_corporate_book_user,ar.corporate.book user,model_ar_corporate_book,base.group_user,1,0,0,0
+access_ar_corporate_book_manager,ar.corporate.book manager,model_ar_corporate_book,account.group_account_manager,1,1,1,1
+access_ar_accounting_book_user,ar.accounting.book user,model_ar_accounting_book,base.group_user,1,0,0,0
+access_ar_accounting_book_manager,ar.accounting.book manager,model_ar_accounting_book,account.group_account_manager,1,1,1,1
+access_ar_book_inventory_user,ar.book.inventory user,model_ar_book_inventory,base.group_user,1,0,0,0
+access_ar_book_inventory_manager,ar.book.inventory manager,model_ar_book_inventory,account.group_account_manager,1,1,1,1
+access_ar_meeting_minute_user,ar.meeting.minute user,model_ar_meeting_minute,base.group_user,1,0,0,0
+access_ar_meeting_minute_manager,ar.meeting.minute manager,model_ar_meeting_minute,account.group_account_manager,1,1,1,1
+access_ar_meeting_minute_signature_user,ar.meeting.minute.signature user,model_ar_meeting_minute_signature,base.group_user,1,0,0,0
+access_ar_meeting_minute_signature_manager,ar.meeting.minute.signature manager,model_ar_meeting_minute_signature,account.group_account_manager,1,1,1,1
+access_ar_shareholder_user,ar.shareholder user,model_ar_shareholder,base.group_user,1,0,0,0
+access_ar_shareholder_manager,ar.shareholder manager,model_ar_shareholder,account.group_account_manager,1,1,1,1
+access_ar_shareholder_transaction_user,ar.shareholder.transaction user,model_ar_shareholder_transaction,base.group_user,1,0,0,0
+access_ar_shareholder_transaction_manager,ar.shareholder.transaction manager,model_ar_shareholder_transaction,account.group_account_manager,1,1,1,1
+access_ar_assembly_attendance_user,ar.assembly.attendance user,model_ar_assembly_attendance,base.group_user,1,0,0,0
+access_ar_assembly_attendance_manager,ar.assembly.attendance manager,model_ar_assembly_attendance,account.group_account_manager,1,1,1,1

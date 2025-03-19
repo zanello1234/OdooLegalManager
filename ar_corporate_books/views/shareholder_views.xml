@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Shareholder Form View -->
+        <record id="view_shareholder_form" model="ir.ui.view">
+            <field name="name">ar.shareholder.form</field>
+            <field name="model">ar.shareholder</field>
+            <field name="arch" type="xml">
+                <form string="Shareholder">
+                    <header>
+                        <button name="action_generate_certificate" string="Generate Certificate" type="object" 
+                                class="oe_highlight" attrs="{'invisible': [('state', '!=', 'active')]}"/>
+                        <button name="action_add_transaction" string="Add Transaction" type="object" 
+                                attrs="{'invisible': [('state', '!=', 'active')]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="active,inactive"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_attendances" type="object" class="oe_stat_button" 
+                                    icon="fa-calendar" attrs="{'invisible': [('attendance_count', '=', 0)]}">
+                                <field name="attendance_count" widget="statinfo" string="Attendances"/>
+                            </button>
+                            <button name="action_view_transactions" type="object" class="oe_stat_button" 
+                                    icon="fa-exchange" attrs="{'invisible': [('transaction_count', '=', 0)]}">
+                                <field name="transaction_count" widget="statinfo" string="Transactions"/>
+                            </button>
+                        </div>
+                        <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Shareholder Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id"/>
+                                <field name="shareholder_number"/>
+                                <field name="shareholder_type"/>
+                                <field name="identification_type"/>
+                                <field name="identification_number"/>
+                                <field name="registration_date"/>
+                            </group>
+                            <group>
+                                <field name="shares_count"/>
+                                <field name="share_percentage" widget="percentage"/>
+                                <field name="share_value"/>
+                                <field name="total_investment"/>
+                                <field name="currency_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="book_id"/>
+                                <field name="folio_number" attrs="{'required': [('book_id', '!=', False)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Notes">
+                                <field name="notes" placeholder="Internal notes..."/>
+                            </page>
+                            <page string="Transactions">
+                                <field name="transaction_ids" readonly="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="date"/>
+                                        <field name="transaction_type"/>
+                                        <field name="shares_count"/>
+                                        <field name="share_price"/>
+                                        <field name="total_amount"/>
+                                        <field name="partner_id"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Attendances">
+                                <field name="attendance_ids" readonly="1">
+                                    <tree>
+                                        <field name="meeting_id"/>
+                                        <field name="meeting_date"/>
+                                        <field name="meeting_type"/>
+                                        <field name="attendance_type"/>
+                                        <field name="shares_represented"/>
+                                        <field name="proxy_id"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Shareholder Tree View -->
+        <record id="view_shareholder_tree" model="ir.ui.view">
+            <field name="name">ar.shareholder.tree</field>
+            <field name="model">ar.shareholder</field>
+            <field name="arch" type="xml">
+                <tree string="Shareholders" decoration-muted="state != 'active'">
+                    <field name="shareholder_number"/>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="shareholder_type"/>
+                    <field name="identification_type"/>
+                    <field name="identification_number"/>
+                    <field name="shares_count" sum="Total Shares"/>
+                    <field name="share_percentage" widget="percentage" avg="Average Percentage"/>
+                    <field name="total_investment" sum="Total Investment"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Shareholder Search View -->
+        <record id="view_shareholder_search" model="ir.ui.view">
+            <field name="name">ar.shareholder.search</field>
+            <field name="model">ar.shareholder</field>
+            <field name="arch" type="xml">
+                <search string="Search Shareholders">
+                    <field name="name"/>
+                    <field name="shareholder_number"/>
+                    <field name="partner_id"/>
+                    <field name="identification_number"/>
+                    <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                    <filter string="Inactive" name="inactive" domain="[('state', '=', 'inactive')]"/>
+                    <separator/>
+                    <filter string="Individuals" name="individuals" domain="[('shareholder_type', '=', 'individual')]"/>
+                    <filter string="Companies" name="companies" domain="[('shareholder_type', '=', 'company')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Shareholder Type" name="groupby_type" domain="[]" context="{'group_by': 'shareholder_type'}"/>
+                        <filter string="Status" name="groupby_state" domain="[]" context="{'group_by': 'state'}"/>
+                        <filter string="Registration Date" name="groupby_date" domain="[]" context="{'group_by': 'registration_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Shareholder Kanban View -->
+        <record id="view_shareholder_kanban" model="ir.ui.view">
+            <field name="name">ar.shareholder.kanban</field>
+            <field name="model">ar.shareholder</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="shareholder_number"/>
+                    <field name="shareholder_type"/>
+                    <field name="shares_count"/>
+                    <field name="share_percentage"/>
+                    <field name="state"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                    <img t-att-src="kanban_image('ar.shareholder', 'image_128', record.id.raw_value)" alt="Shareholder"/>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="o_kanban_record_subtitle">
+                                        <t t-esc="record.shareholder_number.value"/> - <t t-esc="record.shareholder_type.value"/>
+                                    </div>
+                                    <div class="o_kanban_tags_section">
+                                        <span class="badge badge-pill" 
+                                              t-attf-class="badge-#{record.state.raw_value == 'active' ? 'success' : 'danger'}">
+                                            <field name="state"/>
+                                        </span>
+                                    </div>
+                                    <ul>
+                                        <li>Shares: <field name="shares_count"/></li>
+                                        <li>Percentage: <field name="share_percentage" widget="percentage"/></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Shareholder Graph View -->
+        <record id="view_shareholder_graph" model="ir.ui.view">
+            <field name="name">ar.shareholder.graph</field>
+            <field name="model">ar.shareholder</field>
+            <field name="arch" type="xml">
+                <graph string="Shareholders Analysis" type="pie">
+                    <field name="name"/>
+                    <field name="shares_count" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Shareholder Pivot View -->
+        <record id="view_shareholder_pivot" model="ir.ui.view">
+            <field name="name">ar.shareholder.pivot</field>
+            <field name="model">ar.shareholder</field>
+            <field name="arch" type="xml">
+                <pivot string="Shareholders Analysis">
+                    <field name="shareholder_type" type="row"/>
+                    <field name="shares_count" type="measure"/>
+                    <field name="total_investment" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Shareholder Action -->
+        <record id="action_shareholder" model="ir.actions.act_window">
+            <field name="name">Shareholders</field>
+            <field name="res_model">ar.shareholder</field>
+            <field name="view_mode">tree,kanban,form,graph,pivot</field>
+            <field name="search_view_id" ref="view_shareholder_search"/>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first shareholder
+                </p>
+                <p>
+                    Manage shareholders and their share information according to Argentine regulations.
+                </p>
+            </field>
+        </record>
+
+        <!-- Shareholder Transaction Form View -->
+        <record id="view_shareholder_transaction_form" model="ir.ui.view">
+            <field name="name">ar.shareholder.transaction.form</field>
+            <field name="model">ar.shareholder.transaction</field>
+            <field name="arch" type="xml">
+                <form string="Share Transaction">
+                    <header>
+                        <button name="action_confirm" string="Confirm" type="object" 
+                                class="oe_highlight" states="draft"/>
+                        <button name="action_cancel" string="Cancel" type="object" 
+                                states="draft,confirmed"/>
+                        <button name="action_draft" string="Set to Draft" type="object" 
+                                states="cancelled"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date"/>
+                                <field name="shareholder_id"/>
+                                <field name="transaction_type"/>
+                                <field name="partner_id" attrs="{'required': [('transaction_type', 'in', ['purchase', 'sale', 'transfer_in', 'transfer_out'])]}"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="shares_count"/>
+                                <field name="share_price"/>
+                                <field name="total_amount" readonly="1"/>
+                                <field name="currency_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="book_id"/>
+                                <field name="folio_number" attrs="{'required': [('book_id', '!=', False)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Notes">
+                                <field name="notes" placeholder="Transaction notes..."/>
+                            </page>
+                            <page string="Attachments">
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Shareholder Transaction Tree View -->
+        <record id="view_shareholder_transaction_tree" model="ir.ui.view">
+            <field name="name">ar.shareholder.transaction.tree</field>
+            <field name="model">ar.shareholder.transaction</field>
+            <field name="arch" type="xml">
+                <tree string="Share Transactions" decoration-muted="state == 'cancelled'" decoration-info="state == 'draft'">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="shareholder_id"/>
+                    <field name="transaction_type"/>
+                    <field name="shares_count"/>
+                    <field name="share_price"/>
+                    <field name="total_amount"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="partner_id"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Shareholder Transaction Search View -->
+        <record id="view_shareholder_transaction_search" model="ir.ui.view">
+            <field name="name">ar.shareholder.transaction.search</field>
+            <field name="model">ar.shareholder.transaction</field>
+            <field name="arch" type="xml">
+                <search string="Search Share Transactions">
+                    <field name="name"/>
+                    <field name="shareholder_id"/>
+                    <field name="partner_id"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                    <separator/>
+                    <filter string="Purchases" name="purchases" domain="[('transaction_type', '=', 'purchase')]"/>
+                    <filter string="Sales" name="sales" domain="[('transaction_type', '=', 'sale')]"/>
+                    <filter string="Transfers In" name="transfers_in" domain="[('transaction_type', '=', 'transfer_in')]"/>
+                    <filter string="Transfers Out" name="transfers_out" domain="[('transaction_type', '=', 'transfer_out')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Shareholder" name="groupby_shareholder" domain="[]" context="{'group_by': 'shareholder_id'}"/>
+                        <filter string="Transaction Type" name="groupby_type" domain="[]" context="{'group_by': 'transaction_type'}"/>
+                        <filter string="Status" name="groupby_state" domain="[]" context="{'group_by': 'state'}"/>
+                        <filter string="Date" name="groupby_date" domain="[]" context="{'group_by': 'date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Shareholder Transaction Action -->
+        <record id="action_shareholder_transaction" model="ir.actions.act_window">
+            <field name="name">Share Transactions</field>
+            <field name="res_model">ar.shareholder.transaction</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_shareholder_transaction_search"/>
+            <field name="context">{'search_default_confirmed': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first share transaction
+                </p>
+                <p>
+                    Record share purchases, sales, transfers and other transactions.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
