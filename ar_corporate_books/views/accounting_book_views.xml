@@ -9,17 +9,17 @@
                 <form string="Accounting Book Entry">
                     <header>
                         <button name="action_post" string="Post" type="object" 
-                                class="oe_highlight" states="draft"/>
+                                class="oe_highlight" invisible="state != 'draft'"/>
                         <button name="action_cancel" string="Cancel" type="object" 
-                                states="draft,posted"/>
+                                invisible="state not in ('draft', 'posted')"/>
                         <button name="action_create_move" string="Create Journal Entry" type="object" 
-                                attrs="{'invisible': ['|', ('move_id', '!=', False), ('state', '!=', 'posted')]}"/>
+                                invisible="move_id != False or state != 'posted'"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button name="action_view_move" type="object" class="oe_stat_button" 
-                                    icon="fa-pencil-square-o" attrs="{'invisible': [('move_id', '=', False)]}">
+                                    icon="fa-pencil-square-o" invisible="move_id == False">
                                 <div class="o_field_widget o_stat_info">
                                     <span class="o_stat_text">Journal Entry</span>
                                 </div>

@@ -9,19 +9,19 @@
                 <form string="Shareholder">
                     <header>
                         <button name="action_generate_certificate" string="Generate Certificate" type="object" 
-                                class="oe_highlight" attrs="{'invisible': [('state', '!=', 'active')]}"/>
+                                class="oe_highlight" invisible="state != 'active'"/>
                         <button name="action_add_transaction" string="Add Transaction" type="object" 
-                                attrs="{'invisible': [('state', '!=', 'active')]}"/>
+                                invisible="state != 'active'"/>
                         <field name="state" widget="statusbar" statusbar_visible="active,inactive"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button name="action_view_attendances" type="object" class="oe_stat_button" 
-                                    icon="fa-calendar" attrs="{'invisible': [('attendance_count', '=', 0)]}">
+                                    icon="fa-calendar" invisible="attendance_count == 0">
                                 <field name="attendance_count" widget="statinfo" string="Attendances"/>
                             </button>
                             <button name="action_view_transactions" type="object" class="oe_stat_button" 
-                                    icon="fa-exchange" attrs="{'invisible': [('transaction_count', '=', 0)]}">
+                                    icon="fa-exchange" invisible="transaction_count == 0">
                                 <field name="transaction_count" widget="statinfo" string="Transactions"/>
                             </button>
                         </div>
@@ -52,7 +52,7 @@
                         <group>
                             <group>
                                 <field name="book_id"/>
-                                <field name="folio_number" attrs="{'required': [('book_id', '!=', False)]}"/>
+                                <field name="folio_number" required="book_id"/>
                             </group>
                         </group>
                         <notebook>
@@ -237,11 +237,11 @@
                 <form string="Share Transaction">
                     <header>
                         <button name="action_confirm" string="Confirm" type="object" 
-                                class="oe_highlight" states="draft"/>
+                                class="oe_highlight" invisible="state != 'draft'"/>
                         <button name="action_cancel" string="Cancel" type="object" 
-                                states="draft,confirmed"/>
+                                invisible="state not in ('draft', 'confirmed')"/>
                         <button name="action_draft" string="Set to Draft" type="object" 
-                                states="cancelled"/>
+                                invisible="state != 'cancelled'"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
                     </header>
                     <sheet>
@@ -255,7 +255,7 @@
                                 <field name="date"/>
                                 <field name="shareholder_id"/>
                                 <field name="transaction_type"/>
-                                <field name="partner_id" attrs="{'required': [('transaction_type', 'in', ['purchase', 'sale', 'transfer_in', 'transfer_out'])]}"/>
+                                <field name="partner_id" required="transaction_type in ('purchase', 'sale', 'transfer_in', 'transfer_out')"/>
                                 <field name="company_id" groups="base.group_multi_company"/>
                             </group>
                             <group>
@@ -264,7 +264,7 @@
                                 <field name="total_amount" readonly="1"/>
                                 <field name="currency_id" options="{'no_create': True, 'no_open': True}"/>
                                 <field name="book_id"/>
-                                <field name="folio_number" attrs="{'required': [('book_id', '!=', False)]}"/>
+                                <field name="folio_number" required="book_id"/>
                             </group>
                         </group>
                         <notebook>

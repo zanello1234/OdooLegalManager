@@ -9,11 +9,11 @@
                 <form string="Book Inventory">
                     <header>
                         <button name="action_validate" string="Validate" type="object" 
-                                class="oe_highlight" states="draft"/>
+                                class="oe_highlight" invisible="state != 'draft'"/>
                         <button name="action_cancel" string="Cancel" type="object" 
-                                states="draft,validated"/>
+                                invisible="state not in ('draft', 'validated')"/>
                         <button name="action_draft" string="Set to Draft" type="object" 
-                                states="canceled"/>
+                                invisible="state != 'canceled'"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,validated"/>
                     </header>
                     <sheet>

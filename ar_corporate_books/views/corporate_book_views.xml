@@ -9,21 +9,21 @@
                 <form string="Corporate Book">
                     <header>
                         <button name="action_activate" string="Activate" type="object" 
-                                class="oe_highlight" states="draft"/>
+                                class="oe_highlight" invisible="state != 'draft'"/>
                         <button name="action_complete" string="Complete" type="object" 
-                                class="oe_highlight" states="active"/>
+                                class="oe_highlight" invisible="state != 'active'"/>
                         <button name="action_cancel" string="Cancel" type="object" 
-                                states="draft,active"/>
+                                invisible="state not in ('draft', 'active')"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,active,completed"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button name="action_view_minutes" type="object" class="oe_stat_button" 
-                                    icon="fa-file-text-o" attrs="{'invisible': [('minute_count', '=', 0)]}">
+                                    icon="fa-file-text-o" invisible="minute_count == 0">
                                 <field name="minute_count" widget="statinfo" string="Minutes"/>
                             </button>
                             <button name="action_view_documents" type="object" class="oe_stat_button" 
-                                    icon="fa-files-o" attrs="{'invisible': [('documents_count', '=', 0)]}">
+                                    icon="fa-files-o" invisible="documents_count == 0">
                                 <field name="documents_count" widget="statinfo" string="Documents"/>
                             </button>
                         </div>

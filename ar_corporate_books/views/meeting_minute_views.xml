@@ -9,23 +9,23 @@
                 <form string="Meeting Minute">
                     <header>
                         <button name="action_confirm" string="Confirm" type="object" 
-                                class="oe_highlight" states="draft"/>
+                                class="oe_highlight" invisible="state != 'draft'"/>
                         <button name="action_approve" string="Approve" type="object" 
-                                class="oe_highlight" states="confirmed"/>
+                                class="oe_highlight" invisible="state != 'confirmed'"/>
                         <button name="action_cancel" string="Cancel" type="object" 
-                                states="draft,confirmed"/>
+                                invisible="state not in ('draft', 'confirmed')"/>
                         <button name="action_draft" string="Set to Draft" type="object" 
-                                states="canceled"/>
+                                invisible="state != 'canceled'"/>
                         <button name="action_generate_pdf" string="Generate PDF" type="object" 
-                                states="confirmed,approved"/>
+                                invisible="state not in ('confirmed', 'approved')"/>
                         <button name="action_add_signature" string="Add Signature" type="object" 
-                                states="confirmed,approved"/>
+                                invisible="state not in ('confirmed', 'approved')"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,approved"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button name="action_view_attendees" type="object" class="oe_stat_button" 
-                                    icon="fa-users" attrs="{'invisible': [('attendee_ids', '=', [])]}">
+                                    icon="fa-users" invisible="attendee_ids == []">
                                 <field name="attendee_ids" widget="statinfo" string="Attendees"/>
                             </button>
                         </div>
@@ -61,10 +61,10 @@
                             <page string="Conclusions">
                                 <field name="conclusions" placeholder="Meeting conclusions and agreements..."/>
                             </page>
-                            <page string="Attendees" attrs="{'invisible': [('meeting_type', '!=', 'board')]}">
+                            <page string="Attendees" invisible="meeting_type != 'board'">
                                 <field name="attendee_ids" widget="many2many_tags"/>
                             </page>
-                            <page string="Present Shareholders" attrs="{'invisible': [('meeting_type', '=', 'board')]}">
+                            <page string="Present Shareholders" invisible="meeting_type == 'board'">
                                 <field name="present_shareholder_ids"/>
                             </page>
                             <page string="Signatures">

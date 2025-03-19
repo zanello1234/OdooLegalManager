@@ -9,13 +9,13 @@
                 <form string="Assembly Attendance">
                     <header>
                         <button name="action_register" string="Register" type="object" 
-                                class="oe_highlight" states="draft"/>
+                                class="oe_highlight" invisible="state != 'draft'"/>
                         <button name="action_cancel" string="Cancel" type="object" 
-                                states="draft,registered"/>
+                                invisible="state not in ('draft', 'registered')"/>
                         <button name="action_draft" string="Set to Draft" type="object" 
-                                states="cancelled"/>
+                                invisible="state != 'cancelled'"/>
                         <button name="action_print_certificate" string="Print Certificate" type="object" 
-                                states="registered"/>
+                                invisible="state != 'registered'"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,registered"/>
                     </header>
                     <sheet>
@@ -31,7 +31,7 @@
                                 <field name="meeting_type"/>
                                 <field name="shareholder_id"/>
                                 <field name="attendance_type"/>
-                                <field name="proxy_id" attrs="{'invisible': [('attendance_type', '!=', 'proxy')], 'required': [('attendance_type', '=', 'proxy')]}"/>
+                                <field name="proxy_id" invisible="attendance_type != 'proxy'" required="attendance_type == 'proxy'"/>
                             </group>
                             <group>
                                 <field name="shares_represented"/>
@@ -47,7 +47,7 @@
                             <page string="Notes">
                                 <field name="notes" placeholder="Attendance notes..."/>
                             </page>
-                            <page string="Attendance Proof" attrs="{'invisible': [('attendance_type', 'not in', ['proxy', 'written_vote', 'remote'])]}">
+                            <page string="Attendance Proof" invisible="attendance_type not in ('proxy', 'written_vote', 'remote')">
                                 <group>
                                     <field name="attendance_proof" filename="attendance_proof_filename"/>
                                     <field name="attendance_proof_filename" invisible="1"/>
