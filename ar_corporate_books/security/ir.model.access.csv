@@ -15,3 +15,8 @@ access_ar_shareholder_transaction_user,ar.shareholder.transaction user,model_ar_
 access_ar_shareholder_transaction_manager,ar.shareholder.transaction manager,model_ar_shareholder_transaction,account.group_account_manager,1,1,1,1
 access_ar_assembly_attendance_user,ar.assembly.attendance user,model_ar_assembly_attendance,base.group_user,1,0,0,0
 access_ar_assembly_attendance_manager,ar.assembly.attendance manager,model_ar_assembly_attendance,account.group_account_manager,1,1,1,1
+access_ar_book_add_folios_wizard,ar.book.add.folios.wizard,model_ar_book_add_folios_wizard,account.group_account_manager,1,1,1,1
+access_ar_create_accounting_move_wizard,ar.create.accounting.move.wizard,model_ar_create_accounting_move_wizard,account.group_account_manager,1,1,1,1
+access_ar_create_accounting_move_line_wizard,ar.create.accounting.move.line.wizard,model_ar_create_accounting_move_line_wizard,account.group_account_manager,1,1,1,1
+access_ar_meeting_minute_add_signature_wizard,ar.meeting.minute.add.signature.wizard,model_ar_meeting_minute_add_signature_wizard,account.group_account_manager,1,1,1,1
+access_ar_shareholder_transaction_wizard,ar.shareholder.transaction.wizard,model_ar_shareholder_transaction_wizard,account.group_account_manager,1,1,1,1
