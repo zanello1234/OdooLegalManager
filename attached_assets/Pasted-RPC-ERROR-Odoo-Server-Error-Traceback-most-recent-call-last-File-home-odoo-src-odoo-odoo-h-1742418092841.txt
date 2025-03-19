@@ -1,0 +1,81 @@
+RPC_ERROR
+Odoo Server Error
+Traceback (most recent call last):
+  File "/home/odoo/src/odoo/odoo/http.py", line 1788, in _serve_db
+    return service_model.retrying(self._serve_ir_http, self.env)
+  File "/home/odoo/src/odoo/odoo/service/model.py", line 152, in retrying
+    result = func()
+  File "/home/odoo/src/odoo/odoo/http.py", line 1816, in _serve_ir_http
+    response = self.dispatcher.dispatch(rule.endpoint, args)
+  File "/home/odoo/src/odoo/odoo/http.py", line 2020, in dispatch
+    result = self.request.registry['ir.http']._dispatch(endpoint)
+  File "/home/odoo/src/odoo/addons/website/models/ir_http.py", line 235, in _dispatch
+    response = super()._dispatch(endpoint)
+  File "/home/odoo/src/odoo/odoo/addons/base/models/ir_http.py", line 221, in _dispatch
+    result = endpoint(**request.params)
+  File "/home/odoo/src/odoo/odoo/http.py", line 757, in route_wrapper
+    result = endpoint(self, *args, **params_ok)
+  File "/home/odoo/src/odoo/addons/web/controllers/dataset.py", line 29, in call_button
+    action = self._call_kw(model, method, args, kwargs)
+  File "/home/odoo/src/odoo/addons/web/controllers/dataset.py", line 21, in _call_kw
+    return call_kw(Model, method, args, kwargs)
+  File "/home/odoo/src/odoo/odoo/api.py", line 484, in call_kw
+    result = _call_kw_multi(method, model, args, kwargs)
+  File "/home/odoo/src/odoo/odoo/api.py", line 469, in _call_kw_multi
+    result = method(recs, *args, **kwargs)
+  File "<decorator-gen-77>", line 2, in button_immediate_install
+  File "/home/odoo/src/odoo/odoo/addons/base/models/ir_module.py", line 75, in check_and_log
+    return method(self, *args, **kwargs)
+  File "/home/odoo/src/odoo/odoo/addons/base/models/ir_module.py", line 469, in button_immediate_install
+    return self._button_immediate_function(self.env.registry[self._name].button_install)
+  File "/home/odoo/src/odoo/odoo/addons/base/models/ir_module.py", line 593, in _button_immediate_function
+    registry = modules.registry.Registry.new(self._cr.dbname, update_module=True)
+  File "<decorator-gen-16>", line 2, in new
+  File "/home/odoo/src/odoo/odoo/tools/func.py", line 87, in locked
+    return func(inst, *args, **kwargs)
+  File "/home/odoo/src/odoo/odoo/modules/registry.py", line 110, in new
+    odoo.modules.load_modules(registry, force_demo, status, update_module)
+  File "/home/odoo/src/odoo/odoo/modules/loading.py", line 482, in load_modules
+    processed_modules += load_marked_modules(env, graph,
+  File "/home/odoo/src/odoo/odoo/modules/loading.py", line 366, in load_marked_modules
+    loaded, processed = load_module_graph(
+  File "/home/odoo/src/odoo/odoo/modules/loading.py", line 229, in load_module_graph
+    load_data(env, idref, mode, kind='data', package=package)
+  File "/home/odoo/src/odoo/odoo/modules/loading.py", line 73, in load_data
+    tools.convert_file(env, package.name, filename, idref, mode, noupdate, kind)
+  File "/home/odoo/src/odoo/odoo/tools/convert.py", line 627, in convert_file
+    convert_xml_import(env, module, fp, idref, mode, noupdate)
+  File "/home/odoo/src/odoo/odoo/tools/convert.py", line 693, in convert_xml_import
+    obj.parse(doc.getroot())
+  File "/home/odoo/src/odoo/odoo/tools/convert.py", line 613, in parse
+    self._tag_root(de)
+  File "/home/odoo/src/odoo/odoo/tools/convert.py", line 556, in _tag_root
+    f(rec)
+  File "/home/odoo/src/odoo/odoo/tools/convert.py", line 567, in _tag_root
+    raise ParseError(msg) from None  # Restart with "--log-handler odoo.tools.convert:DEBUG" for complete traceback
+odoo.tools.convert.ParseError: while parsing /home/odoo/src/user/zanello1234/OdooLegalManager/ar_corporate_books/views/shareholder_views.xml:5
+Ocurrió un error al validar la vista cercana a:
+
+                        </div>
+                        <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Shareholder Name"/>
+
+El campo "image_1920" no existe en el modelo "ar.shareholder"
+
+View error context:
+{'file': '/home/odoo/src/user/zanello1234/OdooLegalManager/ar_corporate_books/views/shareholder_views.xml',
+ 'line': 17,
+ 'name': 'ar.shareholder.form',
+ 'view': ir.ui.view(2835,),
+ 'view.model': 'ar.shareholder',
+ 'view.parent': ir.ui.view(),
+ 'xmlid': 'view_shareholder_form'}
+
+
+The above server error caused the following client error:
+RPC_ERROR: Odoo Server Error
+    RPC_ERROR
+        at makeErrorFromResponse (https://zanello1234-exchangerate.odoo.com/web/assets/3da18ab/web.assets_web.min.js:2925:163)
+        at XMLHttpRequest.<anonymous> (https://zanello1234-exchangerate.odoo.com/web/assets/3da18ab/web.assets_web.min.js:2929:13)
