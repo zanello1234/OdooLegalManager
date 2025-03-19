@@ -16,7 +16,7 @@ This module allows companies to:
 - Create and manage meeting minutes
 - Maintain shareholder registry
 - Track assembly attendance
-- Generate official reports
+- Generate officia l reports
 """,
     'author': 'Odoo',
     'website': 'https://www.odoo.com',
